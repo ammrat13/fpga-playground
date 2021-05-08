@@ -4,3 +4,6 @@
 # Ignore directories used for synthesis and testing
 # That is, ignore Quartus and ModelSim files
 synth/
+simul/
+# Ignore compilation output
+out/
