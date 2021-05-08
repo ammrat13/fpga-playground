@@ -1,0 +1,6 @@
+# Ignore the `work/` directories created
+**/work/
+
+# Ignore directories used for synthesis and testing
+# That is, ignore Quartus and ModelSim files
+synth/

@@ -1,0 +1,8 @@
+# A list of all the IPs used in this project
+
+# A PLL taking in a 50MHz clock and generating a 25MHz clock
+# module pll_25mhz (
+#   input wire  refclk,
+#   input wire  rst,
+#   output wire outclk_0 );
+pll_25mhz/

@@ -1,0 +1,4 @@
+# Ignore all the intermediate files
+*.o
+*.elf
+*.hex
