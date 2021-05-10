@@ -74,10 +74,11 @@ module soc (
 
     rv32_sevenseg_reg ssr (
         .clk(clk),
-        .write_en({4{sevenseg_reg_valid}} & mem_bus_wstrb),
-        .data(mem_bus_wdata),
+        .rv32_valid(sevenseg_reg_valid),
+        .rv32_ready(sevenseg_reg_ready),
+        .rv32_wdata(mem_bus_wdata),
+        .rv32_wstrb(mem_bus_wstrb),
         .sevenseg(sevenseg) )
     ;
-    assign sevenseg_reg_ready = 1'b1;
 
 endmodule

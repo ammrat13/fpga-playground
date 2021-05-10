@@ -54,20 +54,29 @@ endmodule
 
 module rv32_sevenseg_reg (
     input wire clk,
-    input wire [3:0] write_en,
-    input wire [31:0] data,
+
+    input wire rv32_valid,
+    output wire rv32_ready,
+
+    input wire [31:0] rv32_wdata,
+    input wire  [3:0] rv32_wstrb,
+
     output wire [55:0] sevenseg )
 ;
+
+    assign rv32_ready = 1'b1;
+
+    assign write_en = {8{rv32_valid}}
+                        & { {2{rv32_wstrb[3]}},
+                            {2{rv32_wstrb[2]}},
+                            {2{rv32_wstrb[1]}},
+                            {2{rv32_wstrb[0]}} };
 
     sevenseg_reg #(
         .HEXTETS(8) )
     r (
         .clk(clk),
-        .write_en({
-            {2{write_en[3]}},
-            {2{write_en[2]}},
-            {2{write_en[1]}},
-            {2{write_en[0]}}}),
+        .write_en(write_en),
         .data(data),
         .sevenseg(sevenseg) )
     ;
