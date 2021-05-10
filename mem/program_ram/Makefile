@@ -19,7 +19,7 @@ OBJCOPYFLAGS := -O binary
 
 
 .PHONY : all
-all : bram_init.mem
+all : program.mem
 
 .PHONY : clean
 clean :
