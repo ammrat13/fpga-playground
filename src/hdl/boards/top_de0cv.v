@@ -35,15 +35,15 @@ module top_de0cv (
     inout PS2_DAT,
     inout PS2_DAT2,
 
-    output        SD_CLK,
-    inout         SD_CMD,
-    inout  [3:0]  SD_DATA,
+    output       SD_CLK,
+    inout        SD_CMD,
+    inout  [3:0] SD_DATA,
 
-    output [3:0]  VGA_B,
-    output [3:0]  VGA_G,
-    output        VGA_HS,
-    output [3:0]  VGA_R,
-    output        VGA_VS,
+    output [3:0] VGA_R,
+    output [3:0] VGA_G,
+    output [3:0] VGA_B,
+    output       VGA_HS,
+    output       VGA_VS,
 
     output [6:0] HEX0,
     output [6:0] HEX2,
@@ -68,7 +68,13 @@ module top_de0cv (
 
     soc soc (
         .clk(clock_25),
-        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0})
+        .clk_25(clock_25),
+        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0}),
+        .vga_colors({VGA_R, VGA_G, VGA_B}),
+        .vga_hs(VGA_HS),
+        .vga_vs(VGA_VS)
     );
+
+    assign LEDR = SW;
 
 endmodule

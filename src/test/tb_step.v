@@ -12,11 +12,12 @@
 
 module tb_step ();
 
-    localparam NUM_CYCLES = 100;
+    localparam NUM_CYCLES = 1000;
     reg clk = 1'b0;
 
     soc soc (
-        .clk(clk)
+        .clk(clk),
+        .clk_25(clk)
     );
 
     integer i;

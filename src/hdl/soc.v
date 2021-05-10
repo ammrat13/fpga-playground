@@ -3,12 +3,20 @@
 
     The true top level file for the system. It has the CPU, RAM, and some MMIO
     registers.
+
+    This system has a few clocks. The first can be of any frequency. The others
+    must have certain fixed frequencies. They may be the same clock.
 */
 
 module soc (
     input wire clk,
+    input wire clk_25,
 
-    output wire [55:0] sevenseg
+    output wire [55:0] sevenseg,
+
+    output wire [11:0] vga_colors,
+    output wire        vga_hs,
+    output wire        vga_vs
 );
 
     wire reset_n;
@@ -79,6 +87,13 @@ module soc (
         .rv32_wdata(mem_bus_wdata),
         .rv32_wstrb(mem_bus_wstrb),
         .sevenseg(sevenseg)
+    );
+
+    vga vga (
+        .clk_25(clk_25),
+        .vga_colors(vga_colors),
+        .vga_hs(vga_hs),
+        .vga_vs(vga_vs)
     );
 
 endmodule

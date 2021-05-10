@@ -66,18 +66,18 @@ module rv32_sevenseg_reg (
 
     assign rv32_ready = 1'b1;
 
-    assign write_en = {8{rv32_valid}}
-                        & { {2{rv32_wstrb[3]}},
-                            {2{rv32_wstrb[2]}},
-                            {2{rv32_wstrb[1]}},
-                            {2{rv32_wstrb[0]}} };
+    wire [7:0] write_en = {8{rv32_valid}}
+                            & { {2{rv32_wstrb[3]}},
+                                {2{rv32_wstrb[2]}},
+                                {2{rv32_wstrb[1]}},
+                                {2{rv32_wstrb[0]}} };
 
     sevenseg_reg #(
         .HEXTETS(8)
     ) r (
         .clk(clk),
         .write_en(write_en),
-        .data(data),
+        .data(rv32_wdata),
         .sevenseg(sevenseg)
     );
 
