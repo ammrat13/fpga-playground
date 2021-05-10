@@ -13,8 +13,8 @@ module arbiter (
     input wire bram_ready,
 
     output wire sevenseg_reg_valid,
-    input wire sevenseg_reg_ready )
-;
+    input wire sevenseg_reg_ready
+);
 
     wire bram_active         = rv32_addr <= 32'h0000ffff;
     wire sevenseg_reg_active = rv32_addr >= 32'hfffffffc;

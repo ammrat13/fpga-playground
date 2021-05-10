@@ -16,8 +16,8 @@ module tb_step ();
     reg clk = 1'b0;
 
     soc soc (
-        .clk(clk) )
-    ;
+        .clk(clk)
+    );
 
     integer i;
     initial begin

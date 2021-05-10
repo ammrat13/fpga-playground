@@ -56,19 +56,19 @@ module top_de0cv (
 
     output [9:0] LEDR,
 
-    input [9:0] SW )
-;
+    input [9:0] SW
+);
 
     wire clock_25;
     pll_25mhz pll (
         .refclk(CLOCK_50),
         .outclk_0(clock_25),
-        .rst(1'b0) )
-    ;
+        .rst(1'b0)
+    );
 
     soc soc (
         .clk(clock_25),
-        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0}) )
-    ;
+        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0})
+    );
 
 endmodule

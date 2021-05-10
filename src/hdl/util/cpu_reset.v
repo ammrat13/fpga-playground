@@ -7,8 +7,8 @@
 
 module cpu_reset (
     input wire clk,
-    output reg reset_n )
-;
+    output reg reset_n
+);
 
     reg reset_done = 1'b0;
 

@@ -7,8 +7,8 @@
 
 module bin_2_sevenseg (
     input wire  [3:0] bin,
-    output wire [6:0] sevenseg )
-;
+    output wire [6:0] sevenseg
+);
 
 
     assign sevenseg =   (bin == 4'h0) ? 7'b1000000 :

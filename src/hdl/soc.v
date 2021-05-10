@@ -8,8 +8,8 @@
 module soc (
     input wire clk,
 
-    output wire [55:0] sevenseg )
-;
+    output wire [55:0] sevenseg
+);
 
     wire reset_n;
 
@@ -25,8 +25,8 @@ module soc (
         .ENABLE_COUNTERS(0),
         .CATCH_MISALIGN(0),
         .CATCH_ILLINSN(0),
-        .REGS_INIT_ZERO(1) )
-    cpu (
+        .REGS_INIT_ZERO(1)
+    ) cpu (
         .clk(clk),
         .resetn(reset_n),
         .mem_valid(mem_bus_valid),
@@ -34,13 +34,13 @@ module soc (
         .mem_addr(mem_bus_addr),
         .mem_wdata(mem_bus_wdata),
         .mem_wstrb(mem_bus_wstrb),
-        .mem_rdata(mem_bus_rdata) )
-    ;
+        .mem_rdata(mem_bus_rdata)
+    );
 
-    cpu_reset reset_logic (
+    cpu_reset rst (
         .clk(clk),
-        .reset_n(reset_n) )
-    ;
+        .reset_n(reset_n)
+    );
 
 
     wire bram_valid;
@@ -56,21 +56,21 @@ module soc (
         .bram_valid(bram_valid),
         .bram_ready(bram_ready),
         .sevenseg_reg_valid(sevenseg_reg_valid),
-        .sevenseg_reg_ready(sevenseg_reg_ready) )
-    ;
+        .sevenseg_reg_ready(sevenseg_reg_ready)
+    );
 
     rv32_bram #(
         .ADDR_WIDTH(10),
-        .INIT_FILE("mem/bram_init.mem") )
-    mem (
+        .INIT_FILE("mem/bram_init.mem")
+    ) mem (
         .clk(clk),
         .rv32_valid(bram_valid),
         .rv32_ready(bram_ready),
         .rv32_addr(mem_bus_addr),
         .rv32_wdata(mem_bus_wdata),
         .rv32_wstrb(mem_bus_wstrb),
-        .rv32_rdata(mem_bus_rdata) )
-    ;
+        .rv32_rdata(mem_bus_rdata)
+    );
 
     rv32_sevenseg_reg ssr (
         .clk(clk),
@@ -78,7 +78,7 @@ module soc (
         .rv32_ready(sevenseg_reg_ready),
         .rv32_wdata(mem_bus_wdata),
         .rv32_wstrb(mem_bus_wstrb),
-        .sevenseg(sevenseg) )
-    ;
+        .sevenseg(sevenseg)
+    );
 
 endmodule

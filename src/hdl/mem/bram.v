@@ -11,15 +11,15 @@
 module bram #(
     parameter ADDR_WIDTH = 10,
     parameter DATA_WIDTH =  8,
-    parameter INIT_FILE = "" )
-(
+    parameter INIT_FILE = ""
+) (
     input wire clk,
     input wire write_en,
 
     input wire [ADDR_WIDTH-1:0] addr,
     input wire [DATA_WIDTH-1:0] data_in,
-    output reg [DATA_WIDTH-1:0] data_out )
-;
+    output reg [DATA_WIDTH-1:0] data_out
+);
 
     reg [DATA_WIDTH-1:0] mem [2**ADDR_WIDTH-1:0];
 
@@ -41,8 +41,8 @@ endmodule
 
 module rv32_bram #(
     parameter ADDR_WIDTH = 10,
-    parameter INIT_FILE = "" )
-(
+    parameter INIT_FILE = ""
+) (
     input wire clk,
 
     input wire rv32_valid,
@@ -51,8 +51,8 @@ module rv32_bram #(
     input wire  [31:0] rv32_addr,
     input wire  [31:0] rv32_wdata,
     input wire   [3:0] rv32_wstrb,
-    output wire [31:0] rv32_rdata )
-;
+    output wire [31:0] rv32_rdata
+);
 
     localparam STATE_BUFFER  = 2'h0;
     localparam STATE_WAITING = 2'h1;
@@ -72,14 +72,14 @@ module rv32_bram #(
     bram #(
         .ADDR_WIDTH(ADDR_WIDTH),
         .DATA_WIDTH(32),
-        .INIT_FILE(INIT_FILE) )
-    mem (
+        .INIT_FILE(INIT_FILE)
+    ) mem (
         .clk(clk),
         .write_en(write_en),
         .addr(rv32_addr[ADDR_WIDTH+1:2]),
         .data_in(data_in),
-        .data_out(data_out) )
-    ;
+        .data_out(data_out)
+    );
 
     always @(posedge clk) begin
         case(state)
