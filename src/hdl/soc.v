@@ -89,7 +89,11 @@ module soc (
         .sevenseg(sevenseg)
     );
 
-    vga vga (
+    vga #(
+        .INIT("mem/char_rom/rom.mem"),
+        .CHAR_COLS(8),
+        .CHAR_ROWS(12)
+    ) vga (
         .clk_25(clk_25),
         .vga_colors(vga_colors),
         .vga_hs(vga_hs),
