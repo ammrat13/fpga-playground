@@ -39,8 +39,8 @@ module sevenseg_reg #(
     output wire [7*HEXTETS-1:0] sevenseg
 );
 
-    genvar i;
     generate
+        genvar i;
         for(i = 0; i < HEXTETS; i = i + 1) begin : regs
             sevenseg_reg_single r (
                 .clk(clk),

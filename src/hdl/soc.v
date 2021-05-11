@@ -60,16 +60,19 @@ module soc (
     wire vga_valid;
     wire vga_ready;
 
-    arbiter arb (
+    arbiter #(
+        .N_INPUTS(3),
+        .ADDR_RANGES({
+            32'h00000000, 32'h0000ffff,
+            32'hfffffffc, 32'hffffffff,
+            32'h00010000, 32'h00020000
+        })
+    ) arb (
         .rv32_valid(mem_bus_valid),
         .rv32_ready(mem_bus_ready),
         .rv32_addr(mem_bus_addr),
-        .bram_valid(bram_valid),
-        .bram_ready(bram_ready),
-        .sevenseg_reg_valid(sevenseg_reg_valid),
-        .sevenseg_reg_ready(sevenseg_reg_ready),
-        .vga_valid(vga_valid),
-        .vga_ready(vga_ready)
+        .valids({bram_valid, sevenseg_reg_valid, vga_valid}),
+        .readys({bram_ready, sevenseg_reg_ready, vga_ready})
     );
 
     rv32_bram #(

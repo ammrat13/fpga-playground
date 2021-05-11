@@ -4,32 +4,33 @@
     A module implementing the arbitration logic for MMIO.
 */
 
-module arbiter (
+module arbiter #(
+    parameter N_INPUTS = 1,
+    parameter [N_INPUTS*64 - 1 : 0] ADDR_RANGES = {
+        32'h00000000, 32'hffffffff
+    }
+) (
     input wire rv32_valid,
     output wire rv32_ready,
     input wire [31:0] rv32_addr,
 
-    output wire bram_valid,
-    input wire bram_ready,
-
-    output wire sevenseg_reg_valid,
-    input wire sevenseg_reg_ready,
-
-    output wire vga_valid,
-    input wire vga_ready
+    output wire [N_INPUTS-1 : 0] valids,
+    input wire  [N_INPUTS-1 : 0] readys
 );
 
-    wire bram_active         = rv32_addr <= 32'h0000ffff;
-    wire sevenseg_reg_active = rv32_addr >= 32'hfffffffc;
-    wire vga_active          = rv32_addr >= 32'h00010000 && rv32_addr <= 32'h0001ffff;
+    wire [N_INPUTS-1 : 0] actives;
 
-    assign bram_valid         = bram_active ? rv32_valid : 1'b0;
-    assign sevenseg_reg_valid = sevenseg_reg_active ? rv32_valid : 1'b0;
-    assign vga_valid          = vga_active ? rv32_valid : 1'b0;
+    assign rv32_ready = (actives & readys) != 0;
 
-    assign rv32_ready = bram_active ? bram_ready :
-                        sevenseg_reg_active ? sevenseg_reg_ready :
-                        vga_active ? vga_ready :
-                        1'b0;
+    generate
+        genvar i;
+        for(i = 0; i < N_INPUTS; i = i + 1) begin : gen_loop
+            localparam off = 64 * (i+1);
+            localparam addr_lo = ADDR_RANGES[off- 1 : off-32];
+            localparam addr_hi = ADDR_RANGES[off-33 : off-64];
 
+            assign actives[i] = addr_lo <= rv32_addr && rv32_addr <= addr_hi;
+            assign valids[i] = actives[i] ? rv32_valid : 1'b0;
+        end
+    endgenerate
 endmodule
