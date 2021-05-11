@@ -57,6 +57,9 @@ module soc (
     wire sevenseg_reg_valid;
     wire sevenseg_reg_ready;
 
+    wire vga_valid;
+    wire vga_ready;
+
     arbiter arb (
         .rv32_valid(mem_bus_valid),
         .rv32_ready(mem_bus_ready),
@@ -64,7 +67,9 @@ module soc (
         .bram_valid(bram_valid),
         .bram_ready(bram_ready),
         .sevenseg_reg_valid(sevenseg_reg_valid),
-        .sevenseg_reg_ready(sevenseg_reg_ready)
+        .sevenseg_reg_ready(sevenseg_reg_ready),
+        .vga_valid(vga_valid),
+        .vga_ready(vga_ready)
     );
 
     rv32_bram #(
@@ -89,12 +94,18 @@ module soc (
         .sevenseg(sevenseg)
     );
 
-    vga #(
+    rv32_vga #(
         .INIT("mem/char_rom/rom.mem"),
         .CHAR_COLS(8),
         .CHAR_ROWS(12)
     ) vga (
+        .clk(clk),
         .clk_25(clk_25),
+        .rv32_valid(vga_valid),
+        .rv32_ready(vga_ready),
+        .rv32_addr(mem_bus_addr),
+        .rv32_wdata(mem_bus_wdata),
+        .rv32_wstrb(mem_bus_wstrb),
         .vga_colors(vga_colors),
         .vga_hs(vga_hs),
         .vga_vs(vga_vs)

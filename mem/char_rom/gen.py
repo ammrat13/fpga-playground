@@ -106,5 +106,5 @@ def print_arr(ns):
             n *= 2
 
 if __name__ == '__main__':
-    for i in range(256):
+    for i in range(128):
         print_arr( CHARS.get(chr(i), EMPTY) )
