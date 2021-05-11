@@ -10,7 +10,7 @@ module sevenseg_reg_single (
     input wire clk,
     input wire write_en,
     input wire [3:0] data,
-    output reg [6:0] sevenseg = 7'b1111111
+    output reg [6:0] sevenseg
 );
 
     wire [6:0] res;
@@ -24,6 +24,8 @@ module sevenseg_reg_single (
             sevenseg <= res;
         end
     end
+
+    initial sevenseg = 7'b1000000;
 
 endmodule
 
