@@ -73,7 +73,7 @@ module soc (
     );
 
     rv32_bram #(
-        .ADDR_WIDTH(10),
+        .ADDR_WIDTH(14),
         .INIT_FILE("mem/program_ram/program.mem")
     ) mem (
         .clk(clk),
