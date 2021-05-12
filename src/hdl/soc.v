@@ -12,11 +12,13 @@ module soc (
     input wire clk,
     input wire clk_25,
 
-    output wire [55:0] sevenseg,
-
     output wire [11:0] vga_colors,
     output wire        vga_hs,
-    output wire        vga_vs
+    output wire        vga_vs,
+
+    input wire [31:0] keys,
+
+    output wire [55:0] sevenseg
 );
 
     wire reset_n;
@@ -53,26 +55,36 @@ module soc (
 
     wire bram_valid;
     wire bram_ready;
-
-    wire sevenseg_reg_valid;
-    wire sevenseg_reg_ready;
+    wire [31:0] bram_rdata;
 
     wire vga_valid;
     wire vga_ready;
+    wire [31:0] vga_rdata;
+
+    wire sevenseg_reg_valid;
+    wire sevenseg_reg_ready;
+    wire [31:0] sevenseg_reg_rdata;
+
+    wire keys_valid;
+    wire keys_ready;
+    wire [31:0] keys_rdata;
 
     arbiter #(
-        .N_INPUTS(3),
+        .N_INPUTS(4),
         .ADDR_RANGES({
             32'h00000000, 32'h0000ffff,
-            32'hfffffffc, 32'hffffffff,
-            32'h00010000, 32'h00020000
+            32'h00010000, 32'h00020000,
+            32'hfffffff8, 32'hfffffffb,
+            32'hfffffffc, 32'hffffffff
         })
     ) arb (
         .rv32_valid(mem_bus_valid),
         .rv32_ready(mem_bus_ready),
         .rv32_addr(mem_bus_addr),
-        .valids({bram_valid, sevenseg_reg_valid, vga_valid}),
-        .readys({bram_ready, sevenseg_reg_ready, vga_ready})
+        .rv32_rdata(mem_bus_rdata),
+        .valids({bram_valid, vga_valid, keys_valid, sevenseg_reg_valid}),
+        .readys({bram_ready, vga_ready, keys_ready, sevenseg_reg_ready}),
+        .rdatas({bram_rdata, vga_rdata, keys_rdata, sevenseg_reg_rdata})
     );
 
     rv32_bram #(
@@ -85,16 +97,7 @@ module soc (
         .rv32_addr(mem_bus_addr),
         .rv32_wdata(mem_bus_wdata),
         .rv32_wstrb(mem_bus_wstrb),
-        .rv32_rdata(mem_bus_rdata)
-    );
-
-    rv32_sevenseg_reg ssr (
-        .clk(clk),
-        .rv32_valid(sevenseg_reg_valid),
-        .rv32_ready(sevenseg_reg_ready),
-        .rv32_wdata(mem_bus_wdata),
-        .rv32_wstrb(mem_bus_wstrb),
-        .sevenseg(sevenseg)
+        .rv32_rdata(bram_rdata)
     );
 
     rv32_vga #(
@@ -112,6 +115,21 @@ module soc (
         .vga_colors(vga_colors),
         .vga_hs(vga_hs),
         .vga_vs(vga_vs)
+    );
+
+    rv32_nop_read ks (
+        .in_data(keys),
+        .rv32_ready(keys_ready),
+        .rv32_rdata(keys_rdata)
+    );
+
+    rv32_sevenseg_reg ssr (
+        .clk(clk),
+        .rv32_valid(sevenseg_reg_valid),
+        .rv32_ready(sevenseg_reg_ready),
+        .rv32_wdata(mem_bus_wdata),
+        .rv32_wstrb(mem_bus_wstrb),
+        .sevenseg(sevenseg)
     );
 
 endmodule

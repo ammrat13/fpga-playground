@@ -69,10 +69,11 @@ module top_de0cv (
     soc soc (
         .clk(clock_25),
         .clk_25(clock_25),
-        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0}),
         .vga_colors({VGA_R, VGA_G, VGA_B}),
         .vga_hs(VGA_HS),
-        .vga_vs(VGA_VS)
+        .vga_vs(VGA_VS),
+        .keys({~KEY, 18'h00000, SW}),
+        .sevenseg({HEX5, HEX4, HEX3, HEX2, HEX1, HEX0})
     );
 
     assign LEDR = SW;
