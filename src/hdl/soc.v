@@ -73,7 +73,7 @@ module soc (
         .N_INPUTS(4),
         .ADDR_RANGES({
             32'h00000000, 32'h0000ffff,
-            32'h00010000, 32'h00020000,
+            32'h00010000, 32'h0001ffff,
             32'hfffffff8, 32'hfffffffb,
             32'hfffffffc, 32'hffffffff
         })
